@@ -1,0 +1,6 @@
+{
+  "name": "UtsavPlan - Celebration & Event Planner",
+  "description": "GenAI-powered smart planning assistant for weddings, birthdays, and community celebrations with dynamic budgets, timelines, checklists, and calendar exports.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

@@ -1,0 +1,26 @@
+services:
+  - type: web
+    name: utsavplan
+    runtime: node
+    plan: free
+    buildCommand: npm install --omit=dev
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: LLM_LADDER
+        value: gemini,groq,openrouter
+      - key: LLM_COOLDOWN_SECONDS
+        value: 60
+      - key: GEMINI_MODEL
+        value: gemini-3.5-flash
+      - key: GROQ_MODEL
+        value: llama-3.3-70b-versatile
+      - key: OPENROUTER_MODEL
+        value: meta-llama/llama-3.3-70b-instruct
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: GROQ_API_KEY
+        sync: false
+      - key: OPENROUTER_API_KEY
+        sync: false

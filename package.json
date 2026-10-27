@@ -1,0 +1,19 @@
+{
+  "name": "utsavplan",
+  "version": "1.0.0",
+  "description": "UtsavPlan: smart celebration and event planner with an LLM fallback ladder",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js",
+    "build": "node --check server.js",
+    "lint": "node --check server.js src/*.js test/*.js",
+    "test": "node --test test/*.test.js"
+  },
+  "dependencies": {},
+  "devDependencies": {},
+  "engines": {
+    "node": ">=18"
+  }
+}

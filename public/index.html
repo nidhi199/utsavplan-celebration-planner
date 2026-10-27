@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>UtsavPlan - Smart Celebration & Event Planner</title>
+  <meta name="description" content="Plan weddings, birthdays, and community events with intelligent budgets, timelines, checklists, ceremony pathways, and calendar exports.">
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body data-theme="royal-rajwada">
+  <a href="#main-content" class="skip-link" id="skipLink">Skip to main content</a>
+
+  <header class="app-header">
+    <div class="header-container">
+      <div class="brand">
+        <div class="logo-mark" aria-hidden="true">🪔</div>
+        <div>
+          <h1 class="brand-title" id="appTitle">UtsavPlan</h1>
+          <p class="brand-subtitle" id="appSubtitle">Smart Celebration & Event Planner</p>
+        </div>
+      </div>
+      <div class="header-actions">
+        <button type="button" id="headerPrintBtn" class="header-action-btn header-print-btn" aria-label="Print or Save Plan as PDF">
+          <span class="action-icon" aria-hidden="true">🖨️</span>
+          <span id="headerPrintBtnText">Print / Save PDF</span>
+        </button>
+        <button type="button" id="headerVoiceBtn" class="header-action-btn header-voice-btn" aria-label="Voice Dictation">
+          <span class="action-icon" aria-hidden="true">🎙️</span>
+          <span id="headerVoiceBtnText">Voice Support</span>
+        </button>
+        <button type="button" id="voiceReadoutBtn" class="header-action-btn header-voice-btn header-listen-btn" aria-label="Listen to Plan Summary">
+          <span class="action-icon" aria-hidden="true">🔊</span>
+          <span id="voiceReadoutBtnText">Listen to Plan</span>
+        </button>
+        <button type="button" id="headerShareBtn" class="header-action-btn header-share-btn" aria-label="Share Celebration Plan" aria-haspopup="dialog" aria-expanded="false">
+          <span class="action-icon" aria-hidden="true">🔗</span>
+          <span id="headerShareBtnText">Share Plan</span>
+        </button>
+        <button type="button" id="headerDraftsBtn" class="header-action-btn header-drafts-btn" aria-label="View Saved Drafts" aria-haspopup="dialog" aria-expanded="false">
+          <span class="action-icon" aria-hidden="true">💾</span>
+          <span id="headerDraftsBtnText">My Drafts</span>
+          <span id="draftsCountBadge" class="drafts-count-badge" style="display: none;">0</span>
+        </button>
+        <button type="button" id="langToggleBtn" class="lang-toggle-btn" aria-label="Switch language to Hindi">
+          <span class="lang-icon" aria-hidden="true">🌐</span>
+          <span id="langToggleText">हिंदी में देखें</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main id="main-content" class="main-layout">
+    <!-- Form Sidebar / Column -->
+    <section class="form-section" aria-labelledby="formHeading">
+      <div class="card">
+        <h2 id="formHeading" class="section-title">Plan Your Celebration</h2>
+        <p class="section-desc" id="formDesc">Tailor your celebration details to generate custom budgets, timelines, and ideas.</p>
+
+        <div id="formErrors" class="error-banner" role="alert" style="display: none;"></div>
+
+        <form id="plannerForm" novalidate>
+          <div class="form-group">
+            <label for="eventType" id="lblEventType">Event Type</label>
+            <select id="eventType" name="eventType" required>
+              <option value="wedding">Wedding (Vivah)</option>
+              <option value="birthday">Birthday Party</option>
+              <option value="community">Community & Festival Event</option>
+            </select>
+          </div>
+
+          <div class="form-group" id="weddingTraditionGroup">
+            <label for="weddingTradition" id="lblWeddingTradition">Wedding Tradition (Optional)</label>
+            <select id="weddingTradition" name="tradition">
+              <option value="">None / Custom</option>
+              <option value="general">General / Interfaith</option>
+              <option value="hindu-north">Hindu (North Indian)</option>
+              <option value="hindu-south">Hindu (South Indian)</option>
+              <option value="bengali">Bengali</option>
+              <option value="marwari">Marwari</option>
+              <option value="gujarati">Gujarati</option>
+              <option value="punjabi-sikh">Punjabi Sikh</option>
+              <option value="muslim-nikah">Muslim (Nikah)</option>
+              <option value="christian">Christian</option>
+              <option value="jain">Jain</option>
+              <option value="parsi">Parsi</option>
+            </select>
+            <small class="form-help-text" id="weddingTraditionHelp">Customs vary by family and region. Please confirm details with your family and your priest, qazi, pastor or officiant.</small>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="eventDate" id="lblDate">Event Date</label>
+              <input type="date" id="eventDate" name="date" required>
+            </div>
+            <div class="form-group">
+              <label for="guestCount" id="lblGuestCount">Guest Count</label>
+              <input type="number" id="guestCount" name="guestCount" min="5" max="10000" value="150" required>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="budget" id="lblBudget">Total Budget (₹ INR)</label>
+              <input type="number" id="budget" name="budget" min="1000" step="5000" value="500000" required>
+            </div>
+            <div class="form-group">
+              <label for="style" id="lblStyle">Celebration Style</label>
+              <select id="style" name="style">
+                <option value="traditional">Traditional & Cultural</option>
+                <option value="royal">Royal & Grand (Shahi)</option>
+                <option value="modern">Modern & Elegant</option>
+                <option value="festive">Festive & Colorful</option>
+                <option value="minimalist">Simple & Minimalist</option>
+                <option value="eco-friendly">Eco-Friendly & Sustainable</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="theme" id="lblTheme">Color Palette & Decor Theme</label>
+            <select id="theme" name="theme">
+              <option value="royal-rajwada">Royal Rajwada (Sindoor, Marigold & Antique Gold)</option>
+              <option value="udaipur-palace">Udaipur Palace (Pastel Rose, Mogra White & Sage)</option>
+              <option value="peacock-regalia">Peacock Regalia (Teal, Royal Blue & Burnished Brass)</option>
+              <option value="boho-sundowner">Boho Sundowner (Terracotta, Mustard & Champagne)</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="setting" id="lblSetting">Venue Setting</label>
+            <select id="setting" name="setting">
+              <option value="indoor">Indoor (Banquet / Hall)</option>
+              <option value="outdoor">Outdoor (Lawn / Ground / Garden)</option>
+              <option value="hybrid">Hybrid (Indoor Hall + Lawn)</option>
+            </select>
+          </div>
+
+          <fieldset class="form-group fieldset-group">
+            <legend id="lblDietary">Dietary Preferences</legend>
+            <div class="checkbox-grid">
+              <label class="checkbox-pill">
+                <input type="checkbox" name="dietary" value="jain">
+                <span id="optJain">Jain (No Root Veg)</span>
+              </label>
+              <label class="checkbox-pill">
+                <input type="checkbox" name="dietary" value="satvik">
+                <span id="optSatvik">Satvik (No Onion/Garlic)</span>
+              </label>
+              <label class="checkbox-pill">
+                <input type="checkbox" name="dietary" value="vegetarian" checked>
+                <span id="optVeg">Vegetarian</span>
+              </label>
+              <label class="checkbox-pill">
+                <input type="checkbox" name="dietary" value="non-vegetarian">
+                <span id="optNonVeg">Non-Vegetarian</span>
+              </label>
+              <label class="checkbox-pill">
+                <input type="checkbox" name="dietary" value="vegan">
+                <span id="optVegan">Vegan</span>
+              </label>
+              <label class="checkbox-pill">
+                <input type="checkbox" name="dietary" value="gluten-free">
+                <span id="optGlutenFree">Gluten-Free</span>
+              </label>
+            </div>
+          </fieldset>
+
+          <div class="form-group">
+            <label class="checkbox-row">
+              <input type="checkbox" id="children" name="children">
+              <span id="lblChildren">Yes, kids will attend (allocate fun zone & mild menu)</span>
+            </label>
+          </div>
+
+          <div class="form-group voice-feature-group" id="voiceFeatureBox">
+            <div class="notes-header-row">
+              <label for="notes" id="lblNotes">Special Notes / Ceremonies (Haldi, Mehendi, Sangeet, Themes)</label>
+            </div>
+
+            <!-- Dedicated Interactive Voice Support Box -->
+            <div class="voice-card-box">
+              <div class="voice-card-top">
+                <div class="voice-card-info">
+                  <span class="voice-badge">Web Speech API</span>
+                  <span class="voice-subtext" id="voiceCardSubtext">Bilingual voice dictation (English & Hindi)</span>
+                </div>
+                <button type="button" id="cardVoiceBtn" class="voice-mic-hero-btn" aria-label="Start Voice Dictation">
+                  <span aria-hidden="true">🎙️</span>
+                  <span id="cardVoiceBtnText">Tap to Speak</span>
+                </button>
+              </div>
+
+              <!-- Voice Status Message -->
+              <div id="voiceStatus" class="voice-status" role="status">
+                Web Speech API active. Click Voice Support in the top header to speak notes, or pick sample ceremonies below.
+              </div>
+
+              <!-- Quick Ceremony Voice Prompts -->
+              <div class="voice-prompt-chips-wrapper">
+                <span class="voice-prompt-title" id="voicePromptTitle">Quick ceremony voice notes (click to add):</span>
+                <div class="voice-prompt-chips">
+                  <button type="button" class="prompt-chip" data-text="Haldi flower shower and marigold floral decor">
+                    🌸 Haldi Decor
+                  </button>
+                  <button type="button" class="prompt-chip" data-text="Sangeet DJ night with live sound and stage">
+                    🎵 Sangeet DJ
+                  </button>
+                  <button type="button" class="prompt-chip" data-text="Jain live chaat and satvik sweet counter">
+                    🍲 Jain Chaat
+                  </button>
+                  <button type="button" class="prompt-chip" data-text="Eco-friendly banana leaf plates and zero plastic">
+                    🌿 Eco-Friendly
+                  </button>
+                  <button type="button" class="prompt-chip" data-text="Candid photography and drone coverage">
+                    📸 Candid & Drone
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <textarea id="notes" name="notes" rows="3" placeholder="e.g. Need Haldi flower decor, DJ for Sangeet night, Jain chaat counter..."></textarea>
+          </div>
+
+          <div class="form-actions">
+            <button type="submit" id="submitBtn" class="btn btn-primary">
+              <span class="btn-text" id="submitBtnText">Generate Celebration Plan</span>
+            </button>
+            <button type="button" id="saveDraftBtn" class="btn btn-secondary" aria-haspopup="dialog">
+              <span aria-hidden="true">💾</span>
+              <span id="saveDraftBtnText">Save Draft</span>
+            </button>
+            <button type="button" id="resetBtn" class="btn btn-secondary">
+              <span id="resetBtnText">Reset</span>
+            </button>
+          </div>
+        </form>
+      </div>
+    </section>
+
+    <!-- Results Display Column -->
+    <section class="results-section" aria-live="polite">
+      <!-- Shared Plan Import Notification Banner -->
+      <div id="sharedPlanBanner" class="shared-banner" style="display: none;" role="status">
+        <span class="shared-icon" aria-hidden="true">🎉</span>
+        <span id="sharedPlanBannerText"></span>
+      </div>
+
+      <!-- Live Change Notification Banner -->
+      <div id="changeBanner" class="change-banner" style="display: none;" role="status">
+        <span class="change-icon" aria-hidden="true">🔄</span>
+        <span id="changeBannerText"></span>
+      </div>
+
+      <!-- Draft Status Live Region & Alert Banner -->
+      <div id="draftStatusLive" class="sr-only" role="status" aria-live="polite"></div>
+      <div id="draftAlertBanner" class="change-banner draft-banner" style="display: none;" role="status">
+        <span class="change-icon" aria-hidden="true">💾</span>
+        <span id="draftAlertBannerText"></span>
+      </div>
+
+      <!-- Welcome State (before first calculation) -->
+      <div id="welcomePlaceholder" class="card placeholder-card">
+        <div class="placeholder-icon" aria-hidden="true">✨</div>
+        <h3 id="placeholderTitle">Ready to Plan Your Perfect Celebration</h3>
+        <p id="placeholderDesc">Select your event details on the left and click Generate Celebration Plan. Your tailored budget, timeline, ceremony pathway, checklists, and personalized ideas will appear here.</p>
+        
+        <!-- Welcome Quick Actions -->
+        <div class="welcome-actions">
+          <button type="button" id="welcomeGenerateBtn" class="btn btn-primary">
+            <span aria-hidden="true">⚡</span>
+            <span id="welcomeGenerateText">Generate Sample Plan</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Main Plan Content (hidden until generated) -->
+      <div id="planContent" style="display: none;">
+        <!-- Top Toolbar with Actions -->
+        <div class="plan-header card">
+          <div class="plan-header-info">
+            <h2 id="planHeaderTitle" class="plan-title">Celebration Blueprint</h2>
+            <p id="planHeaderSubtitle" class="plan-subtitle"></p>
+          </div>
+          <div class="plan-header-actions">
+            <button type="button" id="exportIcsBtn" class="btn btn-outline" aria-label="Download Calendar (.ics)">
+              <span aria-hidden="true">📅</span>
+              <span id="exportIcsBtnText">Download Calendar (.ics)</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Planning Alerts / Warnings -->
+        <div id="warningsContainer" class="warnings-list" aria-label="Planning alerts"></div>
+
+        <!-- Personalized Ideas with Provider Badge -->
+        <div class="card ideas-card">
+          <div class="card-header-row">
+            <div>
+              <h3 id="ideasSectionTitle" class="section-title">Personalized Celebration Ideas</h3>
+              <p id="ideasSectionDesc" class="section-subtitle">Curated recommendations tailored to your event theme and guests.</p>
+            </div>
+            <div class="source-badge-wrapper">
+              <span class="source-label" id="lblSource">Source:</span>
+              <span id="ideasSourceBadge" class="source-badge">Rules</span>
+            </div>
+          </div>
+          <ul id="ideasList" class="ideas-list"></ul>
+        </div>
+
+        <!-- Ceremony & Event Pathway Flow -->
+        <div class="card pathway-card">
+          <div class="card-header-row">
+            <div>
+              <h3 id="pathwaySectionTitle" class="section-title">Ceremony & Event Flow</h3>
+              <p id="pathwaySectionDesc" class="section-subtitle">Sequential ritual guide with suggested timings, dress codes, and ceremonial highlights.</p>
+            </div>
+          </div>
+          <div id="pathwayContainer" class="pathway-grid"></div>
+        </div>
+
+        <!-- Contextual Budget Breakdown -->
+        <div class="card budget-card">
+          <div class="card-header-row">
+            <div>
+              <h3 id="budgetSectionTitle" class="section-title">Contextual Budget Breakdown</h3>
+              <p id="budgetSectionDesc" class="section-subtitle">Categories sum exactly to your total budget with rationale for each allocation.</p>
+            </div>
+            <div class="budget-header-badges">
+              <div class="per-guest-pill">
+                <span id="lblPerGuest">Per Guest:</span>
+                <strong id="valPerGuest">₹0</strong>
+              </div>
+              <div class="total-budget-badge">
+                <span id="lblTotalBudgetBadge">Total:</span>
+                <strong id="totalBudgetValue">₹0</strong>
+              </div>
+            </div>
+          </div>
+
+          <!-- Stacked Visual Allocation Strip -->
+          <div class="visualizer-wrapper">
+            <div class="visualizer-label" id="lblBudgetStrip">Proportional Allocation</div>
+            <div id="budgetVisualizerStrip" class="budget-visualizer-strip" role="img" aria-label="Budget allocation breakdown"></div>
+          </div>
+
+          <div id="budgetGrid" class="budget-grid"></div>
+        </div>
+
+        <!-- Actual Spend & Vendor Payment Tracker -->
+        <div class="card tracker-card">
+          <div class="card-header-row">
+            <div>
+              <h3 id="trackerSectionTitle" class="section-title">Actual Spend & Vendor Payment Tracker</h3>
+              <p id="trackerSectionDesc" class="section-subtitle">Enter actual expenses and advance payments to track variances and maintain vendor accountability.</p>
+            </div>
+            <div class="tracker-summary-badges">
+              <span class="summary-pill pill-total">
+                <span id="lblTotalSpent">Spent:</span>
+                <strong id="valTotalSpent">₹0</strong>
+              </span>
+              <span class="summary-pill pill-advance">
+                <span id="lblTotalAdvance">Advance:</span>
+                <strong id="valTotalAdvance">₹0</strong>
+              </span>
+              <span class="summary-pill pill-due">
+                <span id="lblTotalDue">Due:</span>
+                <strong id="valTotalDue">₹0</strong>
+              </span>
+              <span id="pillRemaining" class="summary-pill pill-remaining">
+                <span id="lblTotalRemaining">Remaining:</span>
+                <strong id="valTotalRemaining">₹0</strong>
+              </span>
+            </div>
+          </div>
+          <div class="table-responsive">
+            <table class="tracker-table">
+              <thead>
+                <tr>
+                  <th scope="col" id="thCategory">Category</th>
+                  <th scope="col" id="thBudgeted">Allocated</th>
+                  <th scope="col" id="thActual">Actual Spend (₹)</th>
+                  <th scope="col" id="thAdvance">Advance Paid (₹)</th>
+                  <th scope="col" id="thDue">Balance Due (₹)</th>
+                  <th scope="col" id="thVariance">Variance</th>
+                  <th scope="col" id="thStatus">Status</th>
+                  <th scope="col" id="thVendor">Vendor Details</th>
+                </tr>
+              </thead>
+              <tbody id="trackerTableBody"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Countdown Timeline -->
+        <div class="card timeline-card">
+          <div class="card-header-row">
+            <div>
+              <h3 id="timelineSectionTitle" class="section-title">Countdown Timeline & Milestones</h3>
+              <p id="timelineSectionDesc" class="section-subtitle">Dates scheduled backward from your celebration day.</p>
+            </div>
+            <div class="timeline-header-right">
+              <div id="leadTimeBadge" class="leadtime-badge"></div>
+              <div class="timeline-controls" role="group" aria-label="Timeline expand and collapse controls">
+                <button type="button" id="expandAllBtn" class="btn btn-sm btn-outline timeline-ctrl-btn" aria-label="Expand all milestone sub-tasks">
+                  <span class="ctrl-icon" aria-hidden="true">▾</span>
+                  <span id="expandAllBtnText">Expand all</span>
+                </button>
+                <button type="button" id="collapseAllBtn" class="btn btn-sm btn-outline timeline-ctrl-btn" aria-label="Collapse all milestone sub-tasks">
+                  <span class="ctrl-icon" aria-hidden="true">▸</span>
+                  <span id="collapseAllBtnText">Collapse all</span>
+                </button>
+              </div>
+            </div>
+          </div>
+          <div id="timelineContainer" class="timeline-stepper"></div>
+        </div>
+
+        <!-- Vendor Checklists -->
+        <div class="card checklist-card">
+          <div class="card-header-row">
+            <div>
+              <h3 id="checklistSectionTitle" class="section-title">Vendor & Operational Checklists</h3>
+              <p id="checklistSectionDesc" class="section-subtitle">Tailored action items including safety, dietary compliance, and weather logistics.</p>
+            </div>
+            <div id="checklistProgressBadge" class="progress-badge">0 completed</div>
+          </div>
+          <div id="checklistsContainer" class="checklists-container"></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="app-footer">
+    <div class="footer-container">
+      <p id="footerText">UtsavPlan - Empowering memorable Indian celebrations with responsible GenAI & transparent planning.</p>
+      <p class="footer-note">All estimates are advisory. Currency in INR (₹).</p>
+    </div>
+  </footer>
+
+  <!-- Share Plan Modal Dialog -->
+  <div id="shareModal" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="shareModalTitle" aria-describedby="shareModalDesc" style="display: none;">
+    <div class="modal-card">
+      <div class="modal-header">
+        <div>
+          <h2 id="shareModalTitle" class="modal-title">Share Celebration Plan</h2>
+          <p id="shareModalDesc" class="modal-desc">Share your celebration details with family, friends, or co-planners.</p>
+        </div>
+        <button type="button" id="shareModalCloseBtn" class="modal-close-btn" aria-label="Close dialog">✕</button>
+      </div>
+
+      <div class="modal-body">
+        <!-- Option 1: Shareable Link -->
+        <div class="share-option-box">
+          <div class="share-option-header">
+            <span class="option-icon" aria-hidden="true">🔗</span>
+            <div>
+              <h3 id="lblShareLink" class="option-title">Shareable Web Link</h3>
+              <p id="shareLinkHelp" class="option-desc">Anyone with this link can view and customize this celebration plan.</p>
+            </div>
+          </div>
+          <div class="share-input-row">
+            <input type="text" id="shareLinkInput" class="share-link-input" readonly aria-label="Shareable plan web link">
+            <button type="button" id="copyShareLinkBtn" class="btn btn-primary share-action-btn">
+              <span class="btn-icon" aria-hidden="true">📋</span>
+              <span id="copyShareLinkBtnText">Copy Link</span>
+            </button>
+          </div>
+          <div id="copyFeedback" class="share-feedback" role="status" aria-live="polite" style="display: none;"></div>
+        </div>
+
+        <!-- Option 2: Export JSON -->
+        <div class="share-option-box">
+          <div class="share-option-header">
+            <span class="option-icon" aria-hidden="true">💾</span>
+            <div>
+              <h3 id="lblExportJson" class="option-title">Export Plan as JSON</h3>
+              <p id="descExportJson" class="option-desc">Save an offline copy of your celebration blueprint to share or backup.</p>
+            </div>
+          </div>
+          <div class="share-action-row">
+            <button type="button" id="downloadJsonBtn" class="btn btn-secondary share-action-btn">
+              <span class="btn-icon" aria-hidden="true">📥</span>
+              <span id="downloadJsonBtnText">Download JSON (.json)</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Option 3: Import Shared JSON Plan -->
+        <div class="share-option-box">
+          <div class="share-option-header">
+            <span class="option-icon" aria-hidden="true">📂</span>
+            <div>
+              <h3 id="lblImportJson" class="option-title">Load Shared Plan File</h3>
+              <p id="descImportJson" class="option-desc">Upload a plan JSON file received from a family member or co-planner.</p>
+            </div>
+          </div>
+          <div class="share-action-row">
+            <label for="importJsonFileInput" class="btn btn-outline share-action-btn file-upload-btn">
+              <span class="btn-icon" aria-hidden="true">📤</span>
+              <span id="uploadJsonBtnText">Choose Plan File</span>
+            </label>
+            <input type="file" id="importJsonFileInput" accept=".json,application/json" class="sr-only" aria-label="Upload plan JSON file">
+          </div>
+          <div id="importFeedback" class="share-feedback" role="status" aria-live="polite" style="display: none;"></div>
+        </div>
+
+        <!-- Privacy Assurance -->
+        <div class="share-privacy-note">
+          <span class="privacy-icon" aria-hidden="true">🛡️</span>
+          <p id="sharePrivacyNote">Privacy guarantee: Vendor names, phone numbers, and payment advances are never shared in public links.</p>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" id="modalDismissBtn" class="btn btn-outline">
+          <span id="modalDismissBtnText">Close</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- My Saved Drafts Panel Modal -->
+  <div id="draftsModal" class="modal-backdrop" style="display: none;" role="dialog" aria-modal="true" aria-labelledby="draftsModalTitle">
+    <div class="modal-card drafts-modal-card">
+      <div class="modal-header">
+        <h3 id="draftsModalTitle" class="modal-title">My Saved Drafts</h3>
+        <button type="button" id="draftsModalCloseBtn" class="modal-close-btn" aria-label="Close dialog">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p class="modal-desc" id="draftsModalDesc">Drafts are saved only in this browser. To keep a permanent backup or share with co-planners, use Export JSON in the Share Plan menu.</p>
+        <div id="draftsStorageWarning" class="drafts-storage-warning" style="display: none;" role="alert"></div>
+        <div id="draftsListContainer" class="drafts-list-container">
+          <!-- Drafts rendered dynamically with textContent -->
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" id="draftsModalDismissBtn" class="btn btn-outline">
+          <span id="draftsModalDismissBtnText">Close</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Save Draft Modal Dialog -->
+  <div id="saveDraftModal" class="modal-backdrop" style="display: none;" role="dialog" aria-modal="true" aria-labelledby="saveDraftModalTitle">
+    <div class="modal-card dialog-modal-card">
+      <div class="modal-header">
+        <h3 id="saveDraftModalTitle" class="modal-title">Save Plan Draft</h3>
+        <button type="button" id="saveDraftModalCloseBtn" class="modal-close-btn" aria-label="Close dialog">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label for="draftNameInput" id="lblDraftName">Draft Name (Optional):</label>
+          <input type="text" id="draftNameInput" maxlength="60" class="dialog-text-input">
+        </div>
+        <div id="saveDraftError" class="error-banner" style="display: none;" role="alert"></div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" id="saveDraftCancelBtn" class="btn btn-secondary">
+          <span id="saveDraftCancelBtnText">Cancel</span>
+        </button>
+        <button type="button" id="saveDraftConfirmBtn" class="btn btn-primary">
+          <span id="saveDraftConfirmBtnText">Save Draft</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Rename Draft Modal Dialog -->
+  <div id="renameDraftModal" class="modal-backdrop" style="display: none;" role="dialog" aria-modal="true" aria-labelledby="renameDraftModalTitle">
+    <div class="modal-card dialog-modal-card">
+      <div class="modal-header">
+        <h3 id="renameDraftModalTitle" class="modal-title">Rename Draft</h3>
+        <button type="button" id="renameDraftModalCloseBtn" class="modal-close-btn" aria-label="Close dialog">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label for="renameDraftInput" id="lblRenameDraft">New Draft Name:</label>
+          <input type="text" id="renameDraftInput" maxlength="60" class="dialog-text-input">
+        </div>
+        <div id="renameDraftError" class="error-banner" style="display: none;" role="alert"></div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" id="cancelRenameBtn" class="btn btn-secondary">
+          <span id="cancelRenameBtnText">Cancel</span>
+        </button>
+        <button type="button" id="confirmRenameBtn" class="btn btn-primary">
+          <span id="confirmRenameBtnText">Rename</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Delete Draft Confirmation Modal -->
+  <div id="deleteDraftModal" class="modal-backdrop" style="display: none;" role="dialog" aria-modal="true" aria-labelledby="deleteDraftModalTitle">
+    <div class="modal-card dialog-modal-card">
+      <div class="modal-header">
+        <h3 id="deleteDraftModalTitle" class="modal-title">Delete Draft?</h3>
+        <button type="button" id="deleteDraftModalCloseBtn" class="modal-close-btn" aria-label="Close dialog">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p id="confirmDeleteDraftText" class="confirm-delete-text">Are you sure you want to delete this draft? This action cannot be undone.</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" id="cancelDeleteBtn" class="btn btn-secondary">
+          <span id="cancelDeleteBtnText">Cancel</span>
+        </button>
+        <button type="button" id="confirmDeleteBtn" class="btn btn-danger">
+          <span id="confirmDeleteBtnText">Delete Draft</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script src="/app.js"></script>
+</body>
+</html>
