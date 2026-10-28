@@ -122,7 +122,8 @@ function serveStaticFile(req, res, pathname) {
     return;
   }
 
-  const normalized = path.normalize(decodedPath).replace(/^(\.\.[\/\\])+/, '');
+  // URL paths always use forward slashes, so normalise with posix rules (path.normalize returns backslashes on Windows)
+  const normalized = path.posix.normalize(decodedPath);
   const targetPath = normalized === '/' || normalized === '.' ? '/index.html' : normalized;
   const safePath = path.resolve(PUBLIC_DIR, '.' + (targetPath.startsWith('/') ? targetPath : '/' + targetPath));
 
@@ -300,6 +301,6 @@ export function createServer() {
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
   const server = createServer();
   server.listen(PORT, '0.0.0.0', () => {
-    console.log(`UtsavPlan celebration planner running at http://0.0.0.0:${PORT}`);
+    console.log(`UtsavPlan celebration planner running at http://localhost:${PORT}`);
   });
 }
